@@ -7,29 +7,18 @@ import Filter from 'components/Filter/Filter';
 import './App.css';
 
 class App extends Component {
-  constructor() {
-    super();
-    this.state = {
-      contacts: [
-        { id: 'id-1', name: 'Rosie Simpson', number: '459-12-56' },
-        { id: 'id-2', name: 'Hermione Kline', number: '443-89-12' },
-        { id: 'id-3', name: 'Eden Clements', number: '645-17-79' },
-        { id: 'id-4', name: 'Annie Copeland', number: '227-91-26' },
-      ],
-      filter: '',
-      name: '',
-      number: '',
-    };
-  }
-
-  handleInputChange = e => {
-    this.setState(prev => ({ ...prev, [e.target.name]: e.target.value }));
+  state = {
+    contacts: [
+      { id: 'id-1', name: 'Rosie Simpson', number: '459-12-56' },
+      { id: 'id-2', name: 'Hermione Kline', number: '443-89-12' },
+      { id: 'id-3', name: 'Eden Clements', number: '645-17-79' },
+      { id: 'id-4', name: 'Annie Copeland', number: '227-91-26' },
+    ],
+    filter: '',
   };
 
-  handleSubmit = e => {
-    e.preventDefault();
-
-    const { name, number } = this.state;
+  handleAddContactFormSubmit = formData => {
+    const { name, number } = formData;
 
     if (!name.trim() || !number.trim()) {
       alert('Please enter a valid name and phone number.');
@@ -53,8 +42,6 @@ class App extends Component {
 
     this.setState(prev => ({
       contacts: [...prev.contacts, newContact],
-      name: '',
-      number: '',
       filter: '',
     }));
   };
@@ -71,7 +58,7 @@ class App extends Component {
   };
 
   render() {
-    const { contacts, name, number, filter } = this.state;
+    const { contacts, filter } = this.state;
     const filteredContacts = contacts.filter(contact =>
       contact.name.toLowerCase().includes(filter)
     );
@@ -79,12 +66,7 @@ class App extends Component {
     return (
       <div className="app-container">
         <h2>Phonebook</h2>
-        <ContactForm
-          name={name}
-          number={number}
-          handleInputChange={this.handleInputChange}
-          handleSubmit={this.handleSubmit}
-        />
+        <ContactForm onFormSubmit={this.handleAddContactFormSubmit} />
 
         <h2>Contacts</h2>
         <Filter value={filter} onChange={this.handleFilterChange} />
